@@ -1,81 +1,93 @@
-let wallet = null;
+let walletAddress = null;
 let memory = [];
 
 /* =========================
-   WALLET CONNECT (SAFE MOCK + REAL DETECT)
+   SUI WALLET CONNECTION
 ========================= */
-window.connectWallet = async function () {
+const { WalletStandard } = window['@mysten/dapp-kit'];
+
+let walletAdapter = null;
+
+async function initWallet() {
+
+  const wallets = await WalletStandard.get();
+
+  walletAdapter = wallets.find(w =>
+    w.name.toLowerCase().includes("sui")
+  );
+
+  if (!walletAdapter) {
+    alert("No Sui wallet found");
+  }
+}
+
+/* =========================
+   CONNECT WALLET
+========================= */
+async function connectWallet() {
 
   try {
 
-    if (window.suiWallet && window.suiWallet.requestPermissions) {
+    if (!walletAdapter) await initWallet();
 
-      const res = await window.suiWallet.requestPermissions();
-      wallet = res?.accounts?.[0] || "demo-wallet";
+    const res = await walletAdapter.features['standard:connect'].connect();
 
-    } else {
-      wallet = "demo-wallet-" + Math.random().toString(16).slice(2);
-    }
+    walletAddress = res.accounts[0].address;
 
     document.getElementById("walletStatus").innerText =
-      "Connected: " + wallet;
+      "Connected: " + walletAddress;
 
   } catch (e) {
-    wallet = "fallback-wallet";
-    document.getElementById("walletStatus").innerText =
-      "Connected (fallback)";
+    console.log(e);
+    alert("Wallet connection failed");
   }
-};
+}
 
 /* =========================
-   SEND FUNCTION
+   SEND
 ========================= */
-window.send = function () {
+function send() {
 
   const input = document.getElementById("input").value;
 
-  if (!wallet) {
+  if (!walletAddress) {
     alert("Connect wallet first");
     return;
   }
 
-  const entry = {
+  memory.push({
     text: input,
     time: Date.now()
-  };
-
-  memory.push(entry);
+  });
 
   render();
 
   document.getElementById("mascot").innerText =
-    getMascot(memory);
-};
+    getMascot();
+}
 
 /* =========================
    MASCOT LOGIC
 ========================= */
-function getMascot(mem) {
+function getMascot() {
 
-  if (mem.length === 0) {
-    return "🐘 I am Walrus. Make prediction.";
-  }
+  if (memory.length === 0) return "🐘 waiting...";
 
-  const last = mem[mem.length - 1];
+  const last = memory[memory.length - 1];
 
   if (last.text.includes("Argentina")) {
-    return "🐘 You like Argentina...";
+    return "🐘 Argentina fan detected";
   }
 
-  if (mem.length >= 3) {
-    return "🐘 I remember you now.";
+  if (memory.length > 2) {
+    return "🐘 I remember you now";
   }
 
-  return "🐘 Keep going...";
+  return "🐘 keep going";
 }
 
 /* =========================
-   RENDER MEMORY
+   RENDER
 ========================= */
 function render() {
 
@@ -84,7 +96,16 @@ function render() {
 
   memory.forEach(m => {
     const div = document.createElement("div");
-    div.innerText = m.text + " (" + new Date(m.time).toLocaleTimeString() + ")";
+    div.innerText = m.text;
     box.appendChild(div);
   });
 }
+
+/* =========================
+   EVENTS
+========================= */
+document.getElementById("connectBtn")
+  .addEventListener("click", connectWallet);
+
+document.getElementById("sendBtn")
+  .addEventListener("click", send);
