@@ -13,35 +13,32 @@
 
     <button onclick="connectWallet()">Connect Sui Wallet</button>
 
-    <div id="wallet"></div>
+    <div id="walletStatus">Not connected</div>
   </div>
 
   <div class="container">
 
-    <div class="mascot">
-      <img src="images/walrus.png" />
-      <div id="mascotText">🐘 Waiting for your prediction...</div>
+    <div class="panel">
+      <h3>🐘 Mascot</h3>
+      <div id="mascot">Waiting...</div>
     </div>
 
-    <div class="chat">
-      <div id="chatBox"></div>
+    <div class="panel">
+      <h3>Predict</h3>
 
-      <input id="input" placeholder="Predict World Cup winner..." />
+      <input id="input" placeholder="World Cup winner..." />
       <button onclick="send()">Send</button>
+
+      <div id="chat"></div>
     </div>
 
-    <div class="memory">
-      <h3>Memory Timeline</h3>
-      <div id="memoryBox"></div>
+    <div class="panel">
+      <h3>Memory</h3>
+      <div id="memory"></div>
     </div>
 
   </div>
 
-  <script src="config.js"></script>
-  <script src="wallet.js"></script>
-  <script src="memwal.js"></script>
-  <script src="walrus.js"></script>
-  <script src="mascot.js"></script>
   <script src="app.js"></script>
 
 </body>
