@@ -3,22 +3,25 @@ window.walletAddress = null;
 window.connectWallet = async function () {
 
   try {
-    if (!window.suiWallet) {
-      alert("Please install Sui Wallet");
+    const wallets = window.getWallets?.() || [];
+
+    if (!wallets.length) {
+      alert("No Sui wallet found");
       return;
     }
 
-    const res = await window.suiWallet.requestPermissions();
+    const wallet = wallets[0];
 
-    window.walletAddress = res.accounts?.[0] || "demo-address";
+    const accounts = await wallet.features["standard:connect"]?.();
+
+    window.walletAddress = accounts?.accounts?.[0]?.address || "demo";
 
     document.getElementById("wallet").innerText =
       "Connected: " + window.walletAddress;
 
   } catch (e) {
-    console.log(e);
-    alert("Wallet connection failed (fallback demo mode)");
+    console.log("wallet error", e);
 
-    window.walletAddress = "demo-demo-wallet";
+    window.walletAddress = "demo-wallet";
   }
 };
