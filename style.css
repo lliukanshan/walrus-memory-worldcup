@@ -13,29 +13,12 @@ body {
 }
 
 .container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 15px;
   padding: 20px;
 }
 
 .panel {
   background: #111827;
   padding: 15px;
+  margin-top: 10px;
   border-radius: 10px;
-}
-
-input {
-  width: 70%;
-  padding: 8px;
-}
-
-button {
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-#memory div {
-  font-size: 12px;
-  margin-bottom: 6px;
 }
