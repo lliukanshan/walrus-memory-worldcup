@@ -14,23 +14,28 @@ body {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
   padding: 20px;
 }
 
-.chat, .memory, .mascot {
+.panel {
   background: #111827;
   padding: 15px;
   border-radius: 10px;
 }
 
-#chatBox {
-  height: 300px;
-  overflow-y: auto;
-}
-
 input {
   width: 70%;
   padding: 8px;
+}
+
+button {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+#memory div {
+  font-size: 12px;
+  margin-bottom: 6px;
 }
