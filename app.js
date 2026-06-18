@@ -1,8 +1,11 @@
-async function send() {
+window.send = async function () {
 
   const input = document.getElementById("input").value;
 
-  const agentId = window.walletAddress;
+  if (!window.walletAddress) {
+    alert("Connect wallet first");
+    return;
+  }
 
   const entry = {
     type: "prediction",
@@ -10,15 +13,15 @@ async function send() {
     time: Date.now()
   };
 
-  await MemWal.write(agentId, entry);
+  await MemWal.write(window.walletAddress, entry);
 
-  const memory = await MemWal.read(agentId);
+  const memory = await MemWal.read(window.walletAddress);
 
   render(memory);
 
   document.getElementById("mascotText").innerText =
     mascot(memory);
-}
+};
 
 function render(memory) {
 
@@ -27,7 +30,8 @@ function render(memory) {
 
   memory.forEach(m => {
     const div = document.createElement("div");
-    div.innerText = JSON.stringify(m.payload);
+    div.style.padding = "6px";
+    div.innerText = m.payload?.text || JSON.stringify(m);
     box.appendChild(div);
   });
 }
