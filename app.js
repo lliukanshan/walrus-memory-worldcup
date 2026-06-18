@@ -1,37 +1,90 @@
-window.send = async function () {
+let wallet = null;
+let memory = [];
+
+/* =========================
+   WALLET CONNECT (SAFE MOCK + REAL DETECT)
+========================= */
+window.connectWallet = async function () {
+
+  try {
+
+    if (window.suiWallet && window.suiWallet.requestPermissions) {
+
+      const res = await window.suiWallet.requestPermissions();
+      wallet = res?.accounts?.[0] || "demo-wallet";
+
+    } else {
+      wallet = "demo-wallet-" + Math.random().toString(16).slice(2);
+    }
+
+    document.getElementById("walletStatus").innerText =
+      "Connected: " + wallet;
+
+  } catch (e) {
+    wallet = "fallback-wallet";
+    document.getElementById("walletStatus").innerText =
+      "Connected (fallback)";
+  }
+};
+
+/* =========================
+   SEND FUNCTION
+========================= */
+window.send = function () {
 
   const input = document.getElementById("input").value;
 
-  if (!window.walletAddress) {
+  if (!wallet) {
     alert("Connect wallet first");
     return;
   }
 
   const entry = {
-    type: "prediction",
     text: input,
     time: Date.now()
   };
 
-  await MemWal.write(window.walletAddress, entry);
+  memory.push(entry);
 
-  const memory = await MemWal.read(window.walletAddress);
+  render();
 
-  render(memory);
-
-  document.getElementById("mascotText").innerText =
-    mascot(memory);
+  document.getElementById("mascot").innerText =
+    getMascot(memory);
 };
 
-function render(memory) {
+/* =========================
+   MASCOT LOGIC
+========================= */
+function getMascot(mem) {
 
-  const box = document.getElementById("memoryBox");
+  if (mem.length === 0) {
+    return "🐘 I am Walrus. Make prediction.";
+  }
+
+  const last = mem[mem.length - 1];
+
+  if (last.text.includes("Argentina")) {
+    return "🐘 You like Argentina...";
+  }
+
+  if (mem.length >= 3) {
+    return "🐘 I remember you now.";
+  }
+
+  return "🐘 Keep going...";
+}
+
+/* =========================
+   RENDER MEMORY
+========================= */
+function render() {
+
+  const box = document.getElementById("memory");
   box.innerHTML = "";
 
   memory.forEach(m => {
     const div = document.createElement("div");
-    div.style.padding = "6px";
-    div.innerText = m.payload?.text || JSON.stringify(m);
+    div.innerText = m.text + " (" + new Date(m.time).toLocaleTimeString() + ")";
     box.appendChild(div);
   });
 }
