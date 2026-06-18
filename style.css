@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0b1020;
+  color: white;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: #111827;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+.chat, .memory, .mascot {
+  background: #111827;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+#chatBox {
+  height: 300px;
+  overflow-y: auto;
+}
+
+input {
+  width: 70%;
+  padding: 8px;
+}
