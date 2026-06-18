@@ -2,16 +2,19 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Walrus Memory World Cup</title>
+  <title>Sui Wallet Demo</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- Sui dApp Kit -->
+  <script src="https://unpkg.com/@mysten/dapp-kit@latest/dist/index.global.js"></script>
 </head>
 
 <body>
 
   <div class="topbar">
-    <h1>🐘 Walrus Memory World Cup</h1>
+    <h2>🐘 Walrus Memory World Cup</h2>
 
-    <button onclick="connectWallet()">Connect Sui Wallet</button>
+    <button id="connectBtn">Connect Sui Wallet</button>
 
     <div id="walletStatus">Not connected</div>
   </div>
@@ -19,7 +22,7 @@
   <div class="container">
 
     <div class="panel">
-      <h3>🐘 Mascot</h3>
+      <h3>Mascot</h3>
       <div id="mascot">Waiting...</div>
     </div>
 
@@ -27,13 +30,8 @@
       <h3>Predict</h3>
 
       <input id="input" placeholder="World Cup winner..." />
-      <button onclick="send()">Send</button>
+      <button id="sendBtn">Send</button>
 
-      <div id="chat"></div>
-    </div>
-
-    <div class="panel">
-      <h3>Memory</h3>
       <div id="memory"></div>
     </div>
 
